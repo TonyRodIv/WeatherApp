@@ -1,5 +1,4 @@
 import LocalWeather from './components/LocalWeather';
-import WeatherDisplay from './components/WeatherDisplay';
 
 function App() {
   return (
@@ -12,13 +11,6 @@ function App() {
       </section>
 
       <hr style={{ margin: '2rem 0' }} />
-
-      <section>
-        <h3>Consultar outras cidades</h3>
-        <WeatherDisplay city="Recife" />
-
-
-      </section>
     </div>
   );
 }
