@@ -1,0 +1,27 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main # Executa quando houver um push na branch main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest # Usa a última versão do Ubuntu
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3 # Baixa seu código
+
+      - name: Install and Build 🔧
+        run: |
+          npm install
+          npm run build
+        env:
+          # Passa o secret para o processo de build do Vite
+          VITE_OPENWEATHER_API_KEY: ${{ secrets.VITE_OPENWEATHER_API_KEY }}
+
+      - name: Deploy 🚀
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist # A pasta que será publicada
