@@ -68,20 +68,62 @@ function WeatherDisplay({ city, coords }: WeatherDisplayProps) {
     if (!weatherData) return null;
 
     console.log(weatherData.weather[0].main)
-    let weatherMessage = null
+    let weatherMessage = null;
+
+    // Supondo que 'weatherData' seja o objeto recebido da API OpenWeatherMap
     switch (weatherData.weather[0].main) {
-        case "clouds":
-            weatherMessage = ""
+        case "Thunderstorm":
+            weatherMessage = "Hoje o tempo está com trovoada! ⛈️";
             break;
-        
+
+        case "Drizzle":
+            weatherMessage = "Está chuviscando lá fora. 🌦️";
+            break;
+
+        case "Rain":
+            weatherMessage = "Não se esqueça do guarda-chuva, está chovendo! 🌧️";
+            break;
+
+        case "Snow":
+            weatherMessage = "Tempo de neve! ❄️";
+            break;
+
+        // Casos para o grupo "Atmosphere"
+        case "Mist":
+        case "Smoke":
+        case "Haze":
+        case "Dust":
+        case "Fog":
+        case "Sand":
+        case "Ash":
+        case "Squall":
+        case "Tornado":
+            weatherMessage = "Atenção: A visibilidade pode estar reduzida. 🌫️";
+            break;
+
+        case "Clear":
+            weatherMessage = "O céu está limpo! Um ótimo dia para aproveitar. ☀️";
+            break;
+
+        case "Clouds":
+            weatherMessage = "O tempo está nublado. ☁️";
+            break;
+
         default:
-         console.log('erro')
+            weatherMessage = "Condição do tempo não identificada.";
+            console.log('Condição não tratada:', weatherData.weather[0].main);
+            break;
     }
+
+    console.log(weatherMessage);
 
     return (
         <div>
-            <h2>Tempo em {weatherData.name}</h2>
-            <p>Temperatura: {weatherData.main.temp.toFixed(1)}°C</p>
+            <p>{weatherMessage}</p>
+            <article className='weatherCityTemp'>
+            <h2>{weatherData.name}</h2>
+            <p><strong>{weatherData.main.temp.toFixed(1)}°C</strong></p>
+            </article>
             <p>Sensação Térmica: {weatherData.main.feels_like.toFixed(1)}°C</p>
             <p>Condição: {weatherData.weather[0].description}</p>
         </div>
