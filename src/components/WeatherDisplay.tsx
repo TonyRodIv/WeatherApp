@@ -67,6 +67,17 @@ function WeatherDisplay({ city, coords }: WeatherDisplayProps) {
     if (error) return <p style={{ color: 'red' }}>{error}</p>;
     if (!weatherData) return null;
 
+    console.log(weatherData.weather[0].main)
+    let weatherMessage = null
+    switch (weatherData.weather[0].main) {
+        case "clouds":
+            weatherMessage = ""
+            break;
+        
+        default:
+         console.log('erro')
+    }
+
     return (
         <div>
             <h2>Tempo em {weatherData.name}</h2>

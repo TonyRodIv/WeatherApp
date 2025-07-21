@@ -7,6 +7,7 @@ export interface WeatherData {
   };
   weather: [
     {
+      main: string;
       description: string; // Descrição do tempo (ex: "nuvens dispersas")
       icon: string; // Código do ícone do tempo
     }
