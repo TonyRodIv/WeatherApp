@@ -29,7 +29,6 @@ function WeatherDisplay({ city, coords }: WeatherDisplayProps) {
                 return;
             }
 
-            // Constrói a URL caso usee coordenadas ou cidade
             let url = `https://api.openweathermap.org/data/2.5/weather?appid=${apiKey}&units=metric&lang=pt_br`;
             if (coords) {
                 url += `&lat=${coords.lat}&lon=${coords.lon}`;
@@ -40,13 +39,18 @@ function WeatherDisplay({ city, coords }: WeatherDisplayProps) {
             try {
                 setLoading(true);
                 setError(null);
-                const response = await fetch(url);
 
-                if (!response.ok) {
-                    throw new Error(`Erro: ${response.status} - Verifique a localização.`);
-                }
+                const minimumTimePromise = new Promise(resolve => setTimeout(resolve, 2000));
 
-                const data: WeatherData = await response.json();
+                const fetchPromise = fetch(url).then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Erro: ${response.status} - Verifique a localização.`);
+                    }
+                    return response.json();
+                });
+
+                const [data] = await Promise.all([fetchPromise, minimumTimePromise]);
+
                 setWeatherData(data);
 
             } catch (err) {
@@ -63,7 +67,7 @@ function WeatherDisplay({ city, coords }: WeatherDisplayProps) {
         fetchWeatherData();
     }, [city, coords]);
 
-    if (loading) return <p>Carregando...</p>;
+    if (loading) return <div className="loader-wrapper"><div className="loader"></div></div>;
     if (error) return <p style={{ color: 'red' }}>{error}</p>;
     if (!weatherData) return null;
 
@@ -106,7 +110,7 @@ function WeatherDisplay({ city, coords }: WeatherDisplayProps) {
             break;
 
         case "Clouds":
-            weatherMessage = "O tempo está nublado. ☁️";
+            weatherMessage = "Está <span class='weatherMessageSpan'>Nublado</span><br> Pra caralho agora.";
             break;
 
         default:
@@ -119,13 +123,15 @@ function WeatherDisplay({ city, coords }: WeatherDisplayProps) {
 
     return (
         <div>
-            <p>{weatherMessage}</p>
             <article className='weatherCityTemp'>
-            <h2>{weatherData.name}</h2>
-            <p><strong>{weatherData.main.temp.toFixed(1)}°C</strong></p>
+                <p>{weatherData.name}</p>
+                    <h1>{weatherData.main.temp.toFixed(1)}°C</h1>
             </article>
-            <p>Sensação Térmica: {weatherData.main.feels_like.toFixed(1)}°C</p>
-            <p>Condição: {weatherData.weather[0].description}</p>
+            <h1
+                className='weatherMessage'
+                dangerouslySetInnerHTML={{ __html: weatherMessage }}
+            />
+            <span>Sensação Térmica: {weatherData.main.feels_like.toFixed(1)}°C</span>
         </div>
     );
 }

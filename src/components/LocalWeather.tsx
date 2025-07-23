@@ -47,7 +47,8 @@ function LocalWeather() {
   return coords ? (
     <WeatherDisplay coords={coords} />
   ) : (
-    <p>Obtendo sua localização... Por favor, aceite a solicitação do navegador.</p>
+    <p>Obtendo sua localização... Por favor, aceite a solicitação do navegador.<div className="loader-wrapper"><div className="loader"></div></div></p>
+    
   );
 }
 
