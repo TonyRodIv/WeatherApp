@@ -1,0 +1,11 @@
+
+@keyframes deslizar {
+    0% {
+        opacity: 0.2; /* Começa um pouco visível pra dar um efeito de "chegada" */
+        transform: translateX(-30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
