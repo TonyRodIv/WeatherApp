@@ -8,8 +8,8 @@ function App() {
       <section className="weatherContainer conteudo-frontal">
         <NavigationRail />
         <main className='weatherInfo'>
-          {/* <LocalWeather /> */}
-          <WeatherDisplay  city="Buenos Aires"/>
+          <LocalWeather />
+          {/* <WeatherDisplay  city="Buenos Aires"/> */}
         </main>
       </section>
     </main>
