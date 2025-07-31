@@ -77,40 +77,64 @@ function WeatherDisplay({ city, coords }: WeatherDisplayProps) {
     // Supondo que 'weatherData' seja o objeto recebido da API OpenWeatherMap
     switch (weatherData.weather[0].main) {
         case "Thunderstorm":
-            weatherMessage = "Hoje o tempo está com trovoada! ⛈️";
+            weatherMessage = "Tem uma <span class='weatherMessageSpan'>Tempestade</span> rolando! Melhor ficar em casa se puder.";
             break;
 
         case "Drizzle":
-            weatherMessage = "Está chuviscando lá fora. 🌦️";
+            weatherMessage = "Tá caindo uma <span class='weatherMessageSpan'>Garoa</span> bem de leve agora.";
             break;
 
         case "Rain":
-            weatherMessage = "Não se esqueça do guarda-chuva, está chovendo! 🌧️";
+            weatherMessage = "Está <span class='weatherMessageSpan'>Chovendo</span> por aqui. Pega o guarda-chuva!";
             break;
 
         case "Snow":
-            weatherMessage = "Tempo de neve! ❄️";
+            weatherMessage = "Neve à vista! Está <span class='weatherMessageSpan'>Nevando</span> agora.";
             break;
 
         // Casos para o grupo "Atmosphere"
         case "Mist":
-        case "Smoke":
-        case "Haze":
-        case "Dust":
-        case "Fog":
-        case "Sand":
-        case "Ash":
-        case "Squall":
-        case "Tornado":
-            weatherMessage = "Atenção: A visibilidade pode estar reduzida. 🌫️";
+            weatherMessage = "Tem uma <span class='weatherMessageSpan'>Névoa</span> pairando no ar agora.";
             break;
 
-        case "Clear":
-            weatherMessage = "O céu está limpo! Um ótimo dia para aproveitar. ☀️";
+        case "Smoke":
+            weatherMessage = "O ar está cheio de <span class='weatherMessageSpan'>Fumaça</span> agora.";
+            break;
+
+        case "Haze":
+            weatherMessage = "O tempo está meio <span class='weatherMessageSpan'>Embaçado</span> com névoa seca.";
+            break;
+
+        case "Dust":
+            weatherMessage = "Tem <span class='weatherMessageSpan'>Poeira</span> no ar. Melhor proteger os olhos!";
+            break;
+
+        case "Fog":
+            weatherMessage = "A <span class='weatherMessageSpan'>Neblina</span> está densa por aqui agora.";
+            break;
+
+        case "Sand":
+            weatherMessage = "Uma tempestade de <span class='weatherMessageSpan'>Areia</span> está rolando no momento.";
+            break;
+
+        case "Ash":
+            weatherMessage = "Cuidado! Cinzas vulcânicas (<span class='weatherMessageSpan'>Ash</span>) estão no ar.";
+            break;
+
+        case "Squall":
+            weatherMessage = "Rajadas de vento (<span class='weatherMessageSpan'>Squall</span>) estão passando agora.";
+            break;
+
+        case "Tornado":
+            weatherMessage = "Alerta! <span class='weatherMessageSpan'>Tornado</span> detectado na região!";
             break;
 
         case "Clouds":
-            weatherMessage = "Está <span class='weatherMessageSpan'>Nublado</span><br> Pra caralho agora.";
+            weatherMessage = "Está muito <span class='weatherMessageSpan'>Nublado</span> agora.";
+            break;
+
+        case "Clear":
+            weatherMessage = "O céu está incrivelmente <span class='weatherMessageSpan'>Limpo</span><br> agora.";
             break;
 
         default:
@@ -119,13 +143,14 @@ function WeatherDisplay({ city, coords }: WeatherDisplayProps) {
             break;
     }
 
+
     console.log(weatherMessage);
 
     return (
         <div>
             <article className='weatherCityTemp'>
                 <p>{weatherData.name}</p>
-                    <h1>{weatherData.main.temp.toFixed(1)}°C</h1>
+                <h1>{weatherData.main.temp.toFixed(1)}°C</h1>
             </article>
             <h1
                 className='weatherMessage'

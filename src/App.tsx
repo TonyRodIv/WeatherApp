@@ -1,5 +1,5 @@
 import LocalWeather from './components/LocalWeather';
-// import WeatherDisplay from "./components/WeatherDisplay";
+import WeatherDisplay from "./components/WeatherDisplay";
 import NavigationRail from './components/navigation';
 
 function App() {
@@ -8,8 +8,8 @@ function App() {
       <section className="weatherContainer conteudo-frontal">
         <NavigationRail />
         <main className='weatherInfo'>
-          <LocalWeather />
-          {/* <WeatherDisplay  city="Fortaleza"/> */}
+          {/* <LocalWeather /> */}
+          <WeatherDisplay  city="Buenos Aires"/>
         </main>
       </section>
     </main>
