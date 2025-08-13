@@ -1,5 +1,5 @@
 import LocalWeather from './components/LocalWeather';
-import WeatherDisplay from "./components/WeatherDisplay";
+// import WeatherDisplay from "./components/WeatherDisplay";
 import NavigationRail from './components/navigation';
 
 function App() {
