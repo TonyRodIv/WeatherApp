@@ -74,7 +74,7 @@ function WeatherDisplay({ city, coords }: WeatherDisplayProps) {
     console.log(weatherData.weather[0].main)
     let weatherMessage = null;
 
-    // Supondo que 'weatherData' seja o objeto recebido da API OpenWeatherMap
+   
     switch (weatherData.weather[0].main) {
         case "Thunderstorm":
             weatherMessage = "Tem uma <span class='weatherMessageSpan'>Tempestade</span> rolando! Melhor ficar em casa se puder.";
@@ -130,7 +130,7 @@ function WeatherDisplay({ city, coords }: WeatherDisplayProps) {
             break;
 
         case "Clouds":
-            weatherMessage = "Está muito <span class='weatherMessageSpan'>Nublado</span> agora.";
+            weatherMessage = "Está bem <span class='weatherMessageSpan'>Nublado</span> agora.";
             break;
 
         case "Clear":

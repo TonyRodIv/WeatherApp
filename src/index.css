@@ -19,10 +19,9 @@
 
 }
 
-body {
+#backgroundChanger {
+  color: #fff;
   background-image: url("../public/weatherClear/clearNightWeather.svg");
   background-size: cover;
   background-position: center;
-  color: #fff;
 }
-

@@ -66,3 +66,67 @@
     align-items: center;
     justify-content: center;
 }
+
+
+/* Estilos para o Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Fundo escuro semi-transparente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: #211e22;
+    display: grid;
+    grid-template-rows: 1fr;
+    place-items: center;
+    text-align: center;
+    gap: 2px;
+    color: #fcfcfc;
+    padding: 32px;
+    border-radius: 24px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 400px;
+    position: relative;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.close-button {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+.search-button {
+    margin-top: 6px;
+    cursor: pointer;
+    background-color: #4F378B;
+    color: #fcfcfc;
+    padding: 16px 8px;
+    border-radius: 12px;
+    border: none;
+    width: 100%;
+    /* font-weight: bold; */
+    font-size: 16px;
+}
+
+.inputCity{
+    background-color: #171717;
+    margin-top: 12px;
+    padding: 16px 8px;
+    border-radius: 12px;
+    border: 2px solid #2d2d2d;
+    width: 100%;
+}

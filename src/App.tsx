@@ -4,15 +4,17 @@ import NavigationRail from './components/navigation';
 
 function App() {
   return (
-    <main className="mainContainer progressive-blur-container">
-      <section className="weatherContainer conteudo-frontal">
-        <NavigationRail />
-        <main className='weatherInfo'>
-          <LocalWeather />
-          {/* <WeatherDisplay  city="Buenos Aires"/> */}
-        </main>
-      </section>
-    </main>
+    <div id='backgroundChanger'>
+      <main className="mainContainer progressive-blur-container">
+        <section className="weatherContainer conteudo-frontal">
+          <NavigationRail />
+          <main className='weatherInfo'>
+            <LocalWeather />
+            {/* <WeatherDisplay  city="Buenos Aires"/> */}
+          </main>
+        </section>
+      </main>
+    </div>
   );
 }
 
