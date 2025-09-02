@@ -1,54 +1,62 @@
-import { useState, useEffect } from 'react';
-import WeatherDisplay from './WeatherDisplay';
+import { useState, useEffect } from "react";
+import WeatherDisplay from "./WeatherDisplay";
 
-function LocalWeather() {
+interface LocalWeatherProps {
+  city: string | null; // null = usar geolocalização
+}
+
+function LocalWeather({ city }: LocalWeatherProps) {
   const [coords, setCoords] = useState<{ lat: number; lon: number } | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    // se tem cidade escolhida, não precisa pegar geolocalização
+    if (city) return;
+
     if (!navigator.geolocation) {
-      setError('Geolocalização não é suportada pelo seu navegador.');
+      setError("Geolocalização não é suportada pelo seu navegador.");
       return;
     }
 
-    const handleSuccess = (position: GeolocationPosition) => {
-      setCoords({
-        lat: position.coords.latitude,
-        lon: position.coords.longitude,
-      });
-      setError(null);
-    };
-
-    const handleError = (error: GeolocationPositionError) => {
-      switch (error.code) {
-        case error.PERMISSION_DENIED:
-          setError("Você negou o pedido de Geolocalização. Por favor, habilite nas configurações do seu navegador se desejar ver o tempo local.");
-          break;
-        case error.POSITION_UNAVAILABLE:
-          setError("Informação de localização não está disponível.");
-          break;
-        case error.TIMEOUT:
-          setError("O pedido para obter a localização expirou.");
-          break;
-        default:
-          setError("Ocorreu um erro desconhecido ao obter a localização.");
-          break;
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setCoords({
+          lat: pos.coords.latitude,
+          lon: pos.coords.longitude,
+        });
+        setError(null);
+      },
+      (err) => {
+        const messages: Record<number, string> = {
+          1: "Você negou o pedido de Geolocalização. Ative nas configurações do navegador.",
+          2: "Informação de localização indisponível.",
+          3: "Tempo limite para obter localização expirou.",
+        };
+        setError(messages[err.code] || "Erro desconhecido ao obter localização.");
       }
-    };
+    );
+  }, [city]);
 
-    navigator.geolocation.getCurrentPosition(handleSuccess, handleError);
-
-  }, []);
-
+  // se houve erro
   if (error) {
-    return <p style={{ color: 'orange' }}>{error}</p>;
+    return <p style={{ color: "orange" }}>{error}</p>;
   }
 
+  // se veio cidade escolhida no modal
+  if (city) {
+    return <WeatherDisplay city={city} />;
+  }
+
+  // fallback para geolocalização
   return coords ? (
     <WeatherDisplay coords={coords} />
   ) : (
-    <p>Obtendo sua localização... Por favor, aceite a solicitação do navegador.<div className="loader-wrapper"><div className="loader"></div></div></p>
-    
+    <p>
+      Obtendo sua localização... <br />
+      <div className="loader-wrapper">
+        <div className="loader"></div>
+      </div>
+    </p>
   );
 }
 

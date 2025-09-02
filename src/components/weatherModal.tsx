@@ -1,25 +1,44 @@
-// Arquivo: WeatherModal.js
-import { MdClose } from 'react-icons/md';
+import { useState } from "react";
+import { MdClose } from "react-icons/md";
 
-// O componente recebe a função 'onClose' como uma propriedade (prop)
 interface WeatherModalProps {
-    onClose: () => void;
+  onClose: () => void;
+  onCitySelect: (city: string) => void;
 }
 
-function WeatherModal({ onClose }: WeatherModalProps) {
-    return (
-        <div className="modal-overlay" onClick={onClose}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                <button className="close-button" onClick={onClose}>
-                    <MdClose size={24} color='white'/>
-                </button>
+function WeatherModal({ onClose, onCitySelect }: WeatherModalProps) {
+  const [city, setCity] = useState("");
 
-                <h2>Adicionar Nova Cidade</h2>
-                <input type="text" placeholder="Digite o nome da cidade..." className='inputCity' />
-                <button className="search-button">Buscar</button>
-            </div>
-        </div>
-    );
+  const submitCity = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!city) return;
+    onCitySelect(city);
+    onClose();
+  };
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <button className="close-button" onClick={onClose}>
+          <MdClose size={24} color="white" />
+        </button>
+
+        <h2>Adicionar Nova Cidade</h2>
+        <form onSubmit={submitCity}>
+          <input
+            type="text"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+            placeholder="Digite uma cidade"
+            className="inputCity"
+          />
+          <button type="submit" className="search-button">
+            Buscar
+          </button>
+        </form>
+      </div>
+    </div>
+  );
 }
 
 export default WeatherModal;

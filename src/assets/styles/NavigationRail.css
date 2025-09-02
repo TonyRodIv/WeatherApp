@@ -83,7 +83,7 @@
 }
 
 .modal-content {
-    background-color: #211e22;
+    background-color: #222222;
     display: grid;
     grid-template-rows: 1fr;
     place-items: center;
