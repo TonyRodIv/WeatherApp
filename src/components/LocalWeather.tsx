@@ -2,19 +2,28 @@ import { useState, useEffect } from "react";
 import WeatherDisplay from "./WeatherDisplay";
 
 interface LocalWeatherProps {
-  city: string | null; // null = usar geolocalização
+  city: string | null;
+  onCityNameLoad: (name: string) => void;
 }
 
-function LocalWeather({ city }: LocalWeatherProps) {
+function LocalWeather({ city, onCityNameLoad }: LocalWeatherProps) {
   const [coords, setCoords] = useState<{ lat: number; lon: number } | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isLocating, setIsLocating] = useState(true);
 
   useEffect(() => {
-    // se tem cidade escolhida, não precisa pegar geolocalização
-    if (city) return;
+    if (city) {
+      setIsLocating(false);
+      return;
+    }
+
+    setIsLocating(true);
+    setCoords(null);
+    setError(null);
 
     if (!navigator.geolocation) {
       setError("Geolocalização não é suportada pelo seu navegador.");
+      setIsLocating(false);
       return;
     }
 
@@ -25,6 +34,7 @@ function LocalWeather({ city }: LocalWeatherProps) {
           lon: pos.coords.longitude,
         });
         setError(null);
+        setIsLocating(false);
       },
       (err) => {
         const messages: Record<number, string> = {
@@ -33,31 +43,35 @@ function LocalWeather({ city }: LocalWeatherProps) {
           3: "Tempo limite para obter localização expirou.",
         };
         setError(messages[err.code] || "Erro desconhecido ao obter localização.");
+        setIsLocating(false);
       }
     );
   }, [city]);
 
-  // se houve erro
-  if (error) {
-    return <p style={{ color: "orange" }}>{error}</p>;
-  }
-
-  // se veio cidade escolhida no modal
   if (city) {
     return <WeatherDisplay city={city} />;
   }
 
-  // fallback para geolocalização
-  return coords ? (
-    <WeatherDisplay coords={coords} />
-  ) : (
-    <p>
-      Obtendo sua localização... <br />
-      <div className="loader-wrapper">
-        <div className="loader"></div>
-      </div>
-    </p>
-  );
+  if (isLocating) {
+    return (
+      <p>
+        Obtendo sua localização... <br />
+        <div className="loader-wrapper">
+          <div className="loader"></div>
+        </div>
+      </p>
+    );
+  }
+
+  if (error) {
+    return <p style={{ color: "orange" }}>{error}</p>;
+  }
+
+  if (coords) {
+    return <WeatherDisplay coords={coords} onCityNameLoad={onCityNameLoad} />;
+  }
+  
+  return null; 
 }
 
 export default LocalWeather;

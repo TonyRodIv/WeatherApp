@@ -7,9 +7,10 @@ interface WeatherDisplayProps {
         lat: number;
         lon: number;
     };
+    onCityNameLoad?: (name: string) => void;
 }
 
-function WeatherDisplay({ city, coords }: WeatherDisplayProps) {
+function WeatherDisplay({ city, coords, onCityNameLoad }: WeatherDisplayProps) {
     const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -40,7 +41,7 @@ function WeatherDisplay({ city, coords }: WeatherDisplayProps) {
                 setLoading(true);
                 setError(null);
 
-                const minimumTimePromise = new Promise(resolve => setTimeout(resolve, 2000));
+                const minimumTimePromise = new Promise(resolve => setTimeout(resolve, 1000));
 
                 const fetchPromise = fetch(url).then(response => {
                     if (!response.ok) {
@@ -52,6 +53,9 @@ function WeatherDisplay({ city, coords }: WeatherDisplayProps) {
                 const [data] = await Promise.all([fetchPromise, minimumTimePromise]);
 
                 setWeatherData(data);
+                if (coords && onCityNameLoad) {
+                    onCityNameLoad(data.name);
+                }
 
             } catch (err) {
                 if (err instanceof Error) {
@@ -65,92 +69,52 @@ function WeatherDisplay({ city, coords }: WeatherDisplayProps) {
         };
 
         fetchWeatherData();
-    }, [city, coords]);
+    }, [city, coords, onCityNameLoad]);
 
     if (loading) return <div className="loader-wrapper"><div className="loader"></div></div>;
     if (error) return <p style={{ color: 'red' }}>{error}</p>;
     if (!weatherData) return null;
 
-    console.log(weatherData.weather[0].main)
-    let weatherMessage = null;
-
+    let weatherMessage = "Condição do tempo não identificada.";
+    const weatherMain = weatherData.weather[0].main;
    
-    switch (weatherData.weather[0].main) {
+    switch (weatherMain) {
         case "Thunderstorm":
             weatherMessage = "Tem uma <span class='weatherMessageSpan'>Tempestade</span> rolando! Melhor ficar em casa se puder.";
             break;
-
         case "Drizzle":
             weatherMessage = "Tá caindo uma <span class='weatherMessageSpan'>Garoa</span> bem de leve agora.";
             break;
-
         case "Rain":
             weatherMessage = "Está <span class='weatherMessageSpan'>Chovendo</span> por aqui. Pega o guarda-chuva!";
             break;
-
         case "Snow":
             weatherMessage = "Neve à vista! Está <span class='weatherMessageSpan'>Nevando</span> agora.";
             break;
-
-        // Casos para o grupo "Atmosphere"
         case "Mist":
-            weatherMessage = "Tem uma <span class='weatherMessageSpan'>Névoa</span> pairando no ar agora.";
-            break;
-
         case "Smoke":
-            weatherMessage = "O ar está cheio de <span class='weatherMessageSpan'>Fumaça</span> agora.";
-            break;
-
         case "Haze":
-            weatherMessage = "O tempo está meio <span class='weatherMessageSpan'>Embaçado</span> com névoa seca.";
-            break;
-
         case "Dust":
-            weatherMessage = "Tem <span class='weatherMessageSpan'>Poeira</span> no ar. Melhor proteger os olhos!";
-            break;
-
         case "Fog":
-            weatherMessage = "A <span class='weatherMessageSpan'>Neblina</span> está densa por aqui agora.";
-            break;
-
         case "Sand":
-            weatherMessage = "Uma tempestade de <span class='weatherMessageSpan'>Areia</span> está rolando no momento.";
-            break;
-
         case "Ash":
-            weatherMessage = "Cuidado! Cinzas vulcânicas (<span class='weatherMessageSpan'>Ash</span>) estão no ar.";
-            break;
-
         case "Squall":
-            weatherMessage = "Rajadas de vento (<span class='weatherMessageSpan'>Squall</span>) estão passando agora.";
-            break;
-
         case "Tornado":
-            weatherMessage = "Alerta! <span class='weatherMessageSpan'>Tornado</span> detectado na região!";
+            weatherMessage = `O tempo está com <span class='weatherMessageSpan'>${weatherMain}</span>.`;
             break;
-
         case "Clouds":
             weatherMessage = "Está bem <span class='weatherMessageSpan'>Nublado</span> agora.";
             break;
-
         case "Clear":
             weatherMessage = "O céu está incrivelmente <span class='weatherMessageSpan'>Limpo</span><br> agora.";
             break;
-
-        default:
-            weatherMessage = "Condição do tempo não identificada.";
-            console.log('Condição não tratada:', weatherData.weather[0].main);
-            break;
     }
-
-
-    console.log(weatherMessage);
 
     return (
         <div>
             <article className='weatherCityTemp'>
                 <p>{weatherData.name}</p>
-                <h1>{weatherData.main.temp.toFixed(1)}°C</h1>
+                <h1>{weatherData.main.temp.toFixed(1)}°</h1>
             </article>
             <h1
                 className='weatherMessage'

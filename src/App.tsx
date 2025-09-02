@@ -1,17 +1,37 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import LocalWeather from "./components/LocalWeather";
 import NavigationRail from "./components/navigation";
 import WeatherModal from "./components/weatherModal";
 
 function App() {
-  const [currentLocation, setCurrentLocation] = useState("Minha localização"); 
-  const [cities, setCities] = useState<string[]>([]);
+  const [currentLocation, setCurrentLocation] = useState("Localização...");
+  
+  const [cities, setCities] = useState<string[]>(() => {
+    const savedCities = localStorage.getItem("weatherAppCities");
+    return savedCities ? JSON.parse(savedCities) : [];
+  });
+
   const [activeCity, setActiveCity] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
 
+  useEffect(() => {
+    localStorage.setItem("weatherAppCities", JSON.stringify(cities));
+  }, [cities]);
+
   const handleAddCity = (city: string) => {
-    setCities((prev) => [...prev, city]); 
-    setActiveCity(city); // já troca pra nova cidade
+    if (cities.includes(city) || currentLocation === city) {
+      setActiveCity(city);
+      return;
+    }
+    setCities((prev) => [...prev, city]);
+    setActiveCity(city);
+  };
+
+  const handleCurrentLocationLoad = (name: string) => {
+    setCurrentLocation(name);
+    if (activeCity === null) {
+      setActiveCity(name);
+    }
   };
 
   return (
@@ -27,7 +47,10 @@ function App() {
           />
 
           <main className="weatherInfo">
-            <LocalWeather city={activeCity} />
+            <LocalWeather 
+              city={activeCity === currentLocation ? null : activeCity} 
+              onCityNameLoad={handleCurrentLocationLoad} 
+            />
           </main>
         </section>
       </main>

@@ -1,14 +1,14 @@
 import { MdAdd, MdLocationPin, MdStar } from "react-icons/md";
 
 interface NavigationRailProps {
-  currentCity: string; // cidade detectada via geolocalização
-  cities: string[];    // cidades adicionadas manualmente
-  activeCity: string;  // cidade atualmente selecionada
+  currentLocation: string;
+  cities: string[];
+  activeCity: string | null;
   onSelectCity: (city: string) => void;
   onAddCity: () => void;
 }
 
-function NavigationRail({ currentCity, cities, activeCity, onSelectCity, onAddCity }: NavigationRailProps) {
+function NavigationRail({ currentLocation, cities, activeCity, onSelectCity, onAddCity }: NavigationRailProps) {
   return (
     <nav className="navigationRail">
       <button className="buttonAdd" onClick={onAddCity}>
@@ -16,26 +16,24 @@ function NavigationRail({ currentCity, cities, activeCity, onSelectCity, onAddCi
       </button>
 
       <div>
-        {/* Localização atual */}
         <button
-          className={`navAnchor ${activeCity === currentCity ? "navAnchorActive" : ""}`}
-          onClick={() => onSelectCity(currentCity)}
+          className="navAnchor"
+          onClick={() => onSelectCity(currentLocation)}
         >
-          <div className="navAnchorIcon">
-            <MdLocationPin size={18} />
+          <div className={`navAnchorIcon ${activeCity === currentLocation ? "navAnchorActive" : ""}`}>
+            <MdStar size={18} />
           </div>
-          {currentCity}
+          {currentLocation}
         </button>
-
-        {/* Outras cidades adicionadas */}
+        
         {cities.map((city, index) => (
           <button
             key={index}
-            className={`navAnchor ${activeCity === city ? "navAnchorActive" : ""}`}
+            className="navAnchor"
             onClick={() => onSelectCity(city)}
           >
-            <div className="navAnchorIcon">
-              <MdStar size={18} />
+            <div className={`navAnchorIcon ${activeCity === city ? "navAnchorActive" : ""}`}>
+              <MdLocationPin size={18} />
             </div>
             {city}
           </button>
