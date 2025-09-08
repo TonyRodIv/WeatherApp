@@ -8,9 +8,10 @@ interface WeatherDisplayProps {
         lon: number;
     };
     onCityNameLoad?: (name: string) => void;
+    onWeatherChange?: (weather: string) => void;
 }
 
-function WeatherDisplay({ city, coords, onCityNameLoad }: WeatherDisplayProps) {
+function WeatherDisplay({ city, coords, onCityNameLoad, onWeatherChange }: WeatherDisplayProps) {
     const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -56,6 +57,9 @@ function WeatherDisplay({ city, coords, onCityNameLoad }: WeatherDisplayProps) {
                 if (coords && onCityNameLoad) {
                     onCityNameLoad(data.name);
                 }
+                if (onWeatherChange) {
+                    onWeatherChange(data.weather[0].main);
+                }
 
             } catch (err) {
                 if (err instanceof Error) {
@@ -69,7 +73,7 @@ function WeatherDisplay({ city, coords, onCityNameLoad }: WeatherDisplayProps) {
         };
 
         fetchWeatherData();
-    }, [city, coords, onCityNameLoad]);
+    }, [city, coords, onCityNameLoad, onWeatherChange]);
 
     if (loading) return <div className="loader-wrapper"><div className="loader"></div></div>;
     if (error) return <p style={{ color: 'red' }}>{error}</p>;

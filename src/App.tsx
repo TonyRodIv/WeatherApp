@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import LocalWeather from "./components/LocalWeather";
 import NavigationRail from "./components/navigation";
 import WeatherModal from "./components/weatherModal";
+import BackgroundChanger from "./components/backgroundChanger";
 
 function App() {
   const [currentLocation, setCurrentLocation] = useState("Localização...");
@@ -13,6 +14,7 @@ function App() {
 
   const [activeCity, setActiveCity] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
+  const [weatherCondition, setWeatherCondition] = useState<string | null>(null);
 
   useEffect(() => {
     localStorage.setItem("weatherAppCities", JSON.stringify(cities));
@@ -34,8 +36,13 @@ function App() {
     }
   };
 
+  const handleWeatherChange = (weather: string) => {
+    setWeatherCondition(weather);
+  };
+
   return (
-    <div id="backgroundChanger">
+    <div id="backgroundChanger" className="weather-background">
+      <BackgroundChanger weather={weatherCondition} />
       <main className="mainContainer progressive-blur-container">
         <section className="weatherContainer conteudo-frontal">
           <NavigationRail
@@ -50,6 +57,7 @@ function App() {
             <LocalWeather 
               city={activeCity === currentLocation ? null : activeCity} 
               onCityNameLoad={handleCurrentLocationLoad} 
+              onWeatherChange={handleWeatherChange}
             />
           </main>
         </section>

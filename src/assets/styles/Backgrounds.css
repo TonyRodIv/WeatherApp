@@ -1,0 +1,39 @@
+.weather-background {
+    transition: background-image 1s ease-in-out;
+}
+
+.weather-thunderstorm {
+    background-image: url('https://images.unsplash.com/photo-1605727227659-1f2b8d4e3b7b');
+}
+
+.weather-drizzle {
+    background-image: url('https://images.unsplash.com/photo-1554774853-aae0a22c8aa4');
+}
+
+.weather-rain {
+    background-image: url('https://images.unsplash.com/photo-1534274988757-a28bf1a57c17');
+}
+
+.weather-snow {
+    background-image: url('https://images.unsplash.com/photo-1547754980-3df97fed72a8');
+}
+
+.weather-mist,
+.weather-smoke,
+.weather-haze,
+.weather-dust,
+.weather-fog,
+.weather-sand,
+.weather-ash,
+.weather-squall,
+.weather-tornado {
+    background-image: url('https://images.unsplash.com/photo-1542273917363-3b1817469a68');
+}
+
+.weather-clouds {
+    background-image: url('../../../public/weatherBg/cloudsWeather.svg');
+}
+
+.weather-clear {
+    background-image: url('../../../public/weatherBg/clearWeather.svg');
+}

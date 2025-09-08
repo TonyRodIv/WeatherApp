@@ -5,6 +5,7 @@ import './assets/styles/Animations.css';
 import './assets/styles/Loader.css';
 import './assets/styles/NavigationRail.css';
 import './assets/styles/WeatherDisplay.css';
+import './assets/styles/Backgrounds.css';
 
 import './index.css'
 import App from './App.tsx'

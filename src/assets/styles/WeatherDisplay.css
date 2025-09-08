@@ -12,8 +12,8 @@
 
 .weatherContainer {
   height: 100%;
-  background: #1B0E35;
-  background: linear-gradient(266deg, rgba(27, 14, 53, 0) 5%, rgba(27, 14, 53, 0.9) 95%);
+  background: #000000;
+  background: linear-gradient(266deg, rgba(27, 14, 53, 0) 5%, rgba(0, 0, 0, 0.678) 95%);
   display: grid;
   grid-template-columns: 5rem 1fr;
   grid-template-rows: auto; 

@@ -4,9 +4,10 @@ import WeatherDisplay from "./WeatherDisplay";
 interface LocalWeatherProps {
   city: string | null;
   onCityNameLoad: (name: string) => void;
+  onWeatherChange: (weather: string) => void;
 }
 
-function LocalWeather({ city, onCityNameLoad }: LocalWeatherProps) {
+function LocalWeather({ city, onCityNameLoad, onWeatherChange }: LocalWeatherProps) {
   const [coords, setCoords] = useState<{ lat: number; lon: number } | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLocating, setIsLocating] = useState(true);
@@ -49,7 +50,7 @@ function LocalWeather({ city, onCityNameLoad }: LocalWeatherProps) {
   }, [city]);
 
   if (city) {
-    return <WeatherDisplay city={city} />;
+    return <WeatherDisplay city={city} onWeatherChange={onWeatherChange} />;
   }
 
   if (isLocating) {
@@ -68,7 +69,7 @@ function LocalWeather({ city, onCityNameLoad }: LocalWeatherProps) {
   }
 
   if (coords) {
-    return <WeatherDisplay coords={coords} onCityNameLoad={onCityNameLoad} />;
+    return <WeatherDisplay coords={coords} onCityNameLoad={onCityNameLoad} onWeatherChange={onWeatherChange} />;
   }
   
   return null; 
