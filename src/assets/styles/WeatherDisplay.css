@@ -1,7 +1,7 @@
 .mainContainer {
   display: grid;
   grid-template-columns: 1.4fr 1.6fr;
-  min-height: 100vh;
+  height: 100dvh;
   min-width: 100vw;
 }
 
