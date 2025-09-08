@@ -1,10 +1,10 @@
+
 .navigationRail{
     width: 100px;
     padding: 50px 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* justify-content: center; */
     gap: 50px;
 }
 
@@ -13,8 +13,9 @@
     height: 50px;
     border-radius: 14px;
     border: none;
-    background-color: #4F378B;
+    background-color: var(--dominant-color, #4F378B); /* Cor dinâmica */
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 .buttonAdd:hover{
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2),
@@ -58,7 +59,7 @@
 
 
 .navAnchor .navAnchorActive{
-    background-color: #5c4b8869;
+    background-color: var(--dominant-color-darker, #5c4b8869); /* Cor dinâmica mais escura */
     width: 100%;
     min-height: 25px;
     border-radius: 100px;
@@ -66,6 +67,29 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.context-menu {
+    position: absolute;
+    z-index: 1010; /* Acima do overlay do modal */
+    width: 150px;
+    background-color: #00000073;
+    backdrop-filter: blur(20px);
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    padding: 8px;
+}
+
+.context-menu-item {
+    padding: 10px 12px;
+    cursor: pointer;
+    border-radius: 6px;
+    color: #f0f0f0;
+}
+
+.context-menu-item:hover {
+    background-color: var(--dominant-color, #4F378B); /* Cor dinâmica */
 }
 
 
@@ -84,7 +108,8 @@
 }
 
 .modal-content {
-    background-color: #222222;
+    background-color: #00000050;
+    backdrop-filter: blur(50px);
     display: grid;
     grid-template-rows: 1fr;
     text-align: center;
@@ -113,18 +138,18 @@
 .search-button {
     margin-top: 6px;
     cursor: pointer;
-    background-color: #4F378B;
+    background-color: var(--dominant-color, #4F378B); /* Cor dinâmica */
     color: #fcfcfc;
     padding: 16px 8px;
     border-radius: 12px;
     border: none;
     width: 100%;
-    /* font-weight: bold; */
     font-size: 16px;
+    transition: background-color 0.3s ease;
 }
 
 .inputCity{
-    background-color: #171717;
+    background-color: #1717175e;
     margin-top: 12px;
     padding: 16px 8px;
     border-radius: 12px;

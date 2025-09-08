@@ -84,16 +84,16 @@ function WeatherDisplay({ city, coords, onCityNameLoad, onWeatherChange }: Weath
    
     switch (weatherMain) {
         case "Thunderstorm":
-            weatherMessage = "Tem uma <span class='weatherMessageSpan'>Tempestade</span> rolando! Melhor ficar em casa se puder.";
+            weatherMessage = "Tem uma <span class='weatherMessageSpan'>Tempestade</span> rolando!";
             break;
         case "Drizzle":
             weatherMessage = "Tá caindo uma <span class='weatherMessageSpan'>Garoa</span> bem de leve agora.";
             break;
         case "Rain":
-            weatherMessage = "Está <span class='weatherMessageSpan'>Chovendo</span> por aqui. Pega o guarda-chuva!";
+            weatherMessage = "Está <span class='weatherMessageSpan'>Chovendo</span> por aqui.";
             break;
         case "Snow":
-            weatherMessage = "Neve à vista! Está <span class='weatherMessageSpan'>Nevando</span> agora.";
+            weatherMessage = "Está <span class='weatherMessageSpan'>Nevando</span> agora.";
             break;
         case "Mist":
         case "Smoke":
@@ -110,7 +110,7 @@ function WeatherDisplay({ city, coords, onCityNameLoad, onWeatherChange }: Weath
             weatherMessage = "Está bem <span class='weatherMessageSpan'>Nublado</span> agora.";
             break;
         case "Clear":
-            weatherMessage = "O céu está incrivelmente <span class='weatherMessageSpan'>Limpo</span><br> agora.";
+            weatherMessage = "O céu está bem <span class='weatherMessageSpan'>Limpo</span><br> agora.";
             break;
     }
 
