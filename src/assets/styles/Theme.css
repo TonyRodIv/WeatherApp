@@ -1,0 +1,221 @@
+/* ============================================================
+   Material 3 Expressive — Tokens
+   ============================================================ */
+
+:root {
+  /* Cores neutras (texto sobre fundo escuro) */
+  --md-on-surface: rgba(255, 255, 255, 0.96);
+  --md-on-surface-variant: rgba(255, 255, 255, 0.74);
+  --md-on-surface-muted: rgba(255, 255, 255, 0.54);
+
+  --md-outline: rgba(255, 255, 255, 0.10);
+  --md-outline-strong: rgba(255, 255, 255, 0.20);
+
+  /* Glass dark surfaces (cards sólidos, expressivos) */
+  --card-bg-1: rgba(18, 20, 28, 0.78);
+  --card-bg-2: rgba(13, 15, 22, 0.85);
+  --card-bg-3: rgba(8, 10, 16, 0.92);
+
+  /* State layers */
+  --state-hover: rgba(255, 255, 255, 0.08);
+  --state-focus: rgba(255, 255, 255, 0.12);
+  --state-pressed: rgba(255, 255, 255, 0.16);
+  --state-tonal-hover: color-mix(in srgb, var(--md-primary) 18%, transparent);
+  --state-tonal-pressed: color-mix(in srgb, var(--md-primary) 28%, transparent);
+
+  /* Shape tokens — M3 Expressive (bem arredondado) */
+  --shape-xs: 12px;
+  --shape-sm: 18px;
+  --shape-md: 24px;
+  --shape-lg: 32px;
+  --shape-xl: 36px;
+  --shape-2xl: 44px;
+  --shape-full: 999px;
+
+  /* Blur amounts */
+  --blur-soft: 16px;
+  --blur-medium: 28px;
+  --blur-strong: 40px;
+
+  /* Motion */
+  --motion-fast: 120ms;
+  --motion-standard: 220ms;
+  --motion-emphasized: 360ms;
+  --easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
+  --easing-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+
+/* ============================================================
+   Expressive Glass — cards escuros, arredondados, sem sombras
+   ============================================================ */
+
+.glass-surface,
+.glass-surface--strong,
+.glass-surface--subtle {
+  position: relative;
+  isolation: isolate;
+  border-radius: var(--shape-lg);
+  background: var(--card-bg-1);
+  backdrop-filter: blur(var(--blur-medium)) saturate(160%);
+  -webkit-backdrop-filter: blur(var(--blur-medium)) saturate(160%);
+  border: 1px solid var(--md-outline);
+}
+
+/* Highlight superior (luz refletida sutil) */
+.glass-surface::before,
+.glass-surface--strong::before,
+.glass-surface--subtle::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.06) 0%,
+    transparent 28%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Variante strong (modal / hero) */
+.glass-surface--strong {
+  border-radius: var(--shape-xl);
+  background: var(--card-bg-2);
+  backdrop-filter: blur(var(--blur-strong)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--blur-strong)) saturate(180%);
+  border-color: var(--md-outline-strong);
+}
+
+/* Variante subtle (chips) */
+.glass-surface--subtle {
+  border-radius: var(--shape-md);
+  background: var(--card-bg-1);
+  backdrop-filter: blur(var(--blur-soft)) saturate(150%);
+  -webkit-backdrop-filter: blur(var(--blur-soft)) saturate(150%);
+}
+
+/* Conteúdo deve ficar acima dos pseudo-elementos */
+.glass-surface > *,
+.glass-surface--strong > *,
+.glass-surface--subtle > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================================
+   Spotlight (mouse tracking) — overlay sutil
+   ============================================================ */
+
+.spotlight {
+  --mx: 50%;
+  --my: 50%;
+  position: relative;
+}
+
+.spotlight::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    320px 200px at var(--mx) var(--my),
+    rgba(255, 255, 255, 0.08) 0%,
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity var(--motion-fast) ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.spotlight:hover::after {
+  opacity: 1;
+}
+
+/* ============================================================
+   Tipografia — M3 Expressive (Google Sans com pesos grossos)
+   Pesos:
+     400  Regular   (body, hint, helpers)
+     500  Medium    (subtítulos, valores secundários)
+     600  Semibold  (labels, títulos pequenos)
+     700  Bold      (títulos, displays, valores em destaque)
+   ============================================================ */
+
+.md-display-large {
+  font-size: clamp(4rem, 11vw, 7rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+}
+
+.md-display-medium {
+  font-size: clamp(3rem, 7vw, 4.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.md-headline-large {
+  font-size: clamp(1.875rem, 4vw, 2.625rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.md-headline-medium {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+
+.md-title-large {
+  font-size: 1.375rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+
+.md-title-medium {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: -0.005em;
+}
+
+.md-label-medium {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.md-body-medium {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.md-body-small {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+/* Accessibility */
+*:focus-visible {
+  outline: 2px solid var(--md-on-surface);
+  outline-offset: 2px;
+  border-radius: var(--shape-xs);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

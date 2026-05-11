@@ -1,159 +1,356 @@
+/* ============================================================
+   Navigation Rail (desktop) + Bottom Navbar (mobile)
+   ============================================================ */
 
-.navigationRail{
-    width: 100px;
-    padding: 50px 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 50px;
+.navigationRail {
+  width: 100px;
+  padding: 32px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  z-index: 5;
 }
 
-.buttonAdd{
-    width: 50px;
-    height: 50px;
-    border-radius: 14px;
-    border: none;
-    background-color: var(--dominant-color, #4F378B); /* Cor dinâmica */
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-.buttonAdd:hover{
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2),
-              0px 10px 15px rgba(0, 0, 0, 0.05);
-}
+/* FAB ----------------------------------------------------------- */
 
-.navAnchor{
-    width: 50px;
-    height: 60px;
-    border: none;
-    background-color: transparent;
-    cursor: pointer;
-    color: white;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    gap: 5px;
-
-    text-align: center;
-    font-weight: 600;
-    font-size: 14px;
-    margin-bottom: 20px;
+.buttonAdd {
+  width: 56px;
+  height: 56px;
+  border-radius: 20px;
+  border: none;
+  background-color: var(--md-primary, #4f378b);
+  color: var(--md-on-primary, #fff);
+  cursor: pointer;
+  transition: background-color var(--motion-standard, 0.3s) ease,
+    transform var(--motion-fast, 0.12s) ease,
+    filter var(--motion-fast, 0.12s) ease;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
 }
 
-.navAnchor div{
-    background-color: #5c4b8800;
-    width: 100%;
-    min-height: 25px;
-    border-radius: 100px;
-    padding: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.navAnchor div:hover{
-    background-color: #9793a328;
+.buttonAdd:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
 }
 
-
-.navAnchor .navAnchorActive{
-    background-color: var(--dominant-color-darker, #5c4b8869); /* Cor dinâmica mais escura */
-    width: 100%;
-    min-height: 25px;
-    border-radius: 100px;
-    padding: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.3s ease;
+.buttonAdd:active {
+  transform: translateY(0);
 }
+
+.navigationRail__list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.28) transparent;
+  gap: 4px;
+}
+
+/* Nav item ------------------------------------------------------ */
+
+.navAnchor {
+  width: 60px;
+  min-height: 60px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  color: var(--md-on-surface-variant);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 16px;
+  padding: 0;
+  font-family: inherit;
+  transition: color var(--motion-fast) ease;
+}
+
+.navAnchor:hover {
+  color: var(--md-on-surface);
+}
+
+.navAnchor div {
+  background-color: transparent;
+  width: 56px;
+  min-height: 32px;
+  border-radius: 100px;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--motion-standard, 0.3s) ease;
+}
+
+.navAnchor div:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.navAnchor .navAnchorActive {
+  background-color: var(--md-primary, #5c4b88);
+  color: var(--md-on-primary, white);
+  width: 56px;
+  min-height: 32px;
+  border-radius: 100px;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--motion-standard, 0.3s) ease;
+}
+
+.navAnchorLabel {
+  display: block;
+  max-width: 88px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0 4px;
+  color: inherit;
+}
+
+.navAnchor[aria-current="page"] {
+  color: var(--md-on-surface);
+}
+
+/* Context menu -------------------------------------------------- */
 
 .context-menu {
-    position: absolute;
-    z-index: 1010; /* Acima do overlay do modal */
-    width: 150px;
-    background-color: #00000073;
-    backdrop-filter: blur(20px);
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    padding: 8px;
+  position: fixed;
+  z-index: 1010;
+  min-width: 180px;
+  background-color: rgba(13, 15, 22, 0.92);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid var(--md-outline-strong, rgba(255, 255, 255, 0.2));
+  border-radius: 18px;
+  padding: 8px;
+  animation: fadeIn 160ms var(--easing-standard, ease) both;
 }
 
 .context-menu-item {
-    padding: 10px 12px;
-    cursor: pointer;
-    border-radius: 6px;
-    color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  width: 100%;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  border-radius: 10px;
+  color: var(--md-on-surface);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-align: left;
+  font-family: inherit;
+  transition: background-color var(--motion-fast, 0.12s) ease;
 }
 
 .context-menu-item:hover {
-    background-color: var(--dominant-color, #4F378B); /* Cor dinâmica */
+  background-color: rgba(255, 255, 255, 0.08);
 }
 
+/* Modal --------------------------------------------------------- */
 
-/* Estilos para o Modal */
 .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7); /* Fundo escuro semi-transparente */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: grid;
+  place-items: center;
+  z-index: 1000;
+  padding: 16px;
+  animation: fadeIn 200ms var(--easing-standard, ease) both;
 }
 
 .modal-content {
-    background-color: #00000050;
-    backdrop-filter: blur(50px);
-    display: grid;
-    grid-template-rows: 1fr;
-    text-align: center;
-    gap: 2px;
-    color: #fcfcfc;
-    padding: 32px;
-    border-radius: 24px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    width: 90%;
-    max-width: 400px;
-    position: relative;
-    animation: fadeIn 0.3s ease-out;
-    
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  color: var(--md-on-surface, #fcfcfc);
+  border-radius: var(--shape-xl, 36px);
+  animation: scaleIn 240ms var(--easing-decelerate, ease) both;
 }
 
-.close-button {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    font-size: 1.5rem;
+.modal-content__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  border-radius: 999px;
+  color: var(--md-on-surface-variant, rgba(255, 255, 255, 0.72));
+  transition: background var(--motion-fast, 0.12s) ease;
 }
 
-.search-button {
-    margin-top: 6px;
-    cursor: pointer;
-    background-color: var(--dominant-color, #4F378B); /* Cor dinâmica */
-    color: #fcfcfc;
-    padding: 16px 8px;
-    border-radius: 12px;
-    border: none;
+.modal-content__close:hover {
+  background: var(--state-hover, rgba(255, 255, 255, 0.08));
+  color: var(--md-on-surface, white);
+}
+
+.modal-content__header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-right: 40px;
+}
+
+.modal-content__hint {
+  color: var(--md-on-surface-variant, rgba(255, 255, 255, 0.72));
+  font-weight: 500;
+}
+
+.modal-content__form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.modal-content__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* Text Field ---------------------------------------------------- */
+
+.text-field {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-radius: var(--shape-md, 24px);
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--md-outline, rgba(255, 255, 255, 0.14));
+  transition: border-color var(--motion-fast, 0.12s) ease,
+    background var(--motion-fast, 0.12s) ease;
+}
+
+.text-field:focus-within {
+  border-color: var(--md-primary, #4f378b);
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.text-field__icon {
+  color: var(--md-on-surface-variant, rgba(255, 255, 255, 0.72));
+  flex-shrink: 0;
+}
+
+.text-field__input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--md-on-surface, white);
+  font-size: 1rem;
+  font-weight: 500;
+  flex: 1;
+  min-width: 0;
+  font-family: inherit;
+}
+
+.text-field__input::placeholder {
+  color: var(--md-on-surface-muted, rgba(255, 255, 255, 0.52));
+}
+
+/* ============================================================
+   MOBILE: bottom navbar + FAB flutuante
+   ============================================================ */
+
+@media (max-width: 720px) {
+  .navigationRail {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: auto;
     width: 100%;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-}
+    height: auto;
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    background: rgba(13, 15, 22, 0.78);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border-top: 1px solid var(--md-outline-strong, rgba(255, 255, 255, 0.18));
+  }
 
-.inputCity{
-    background-color: #1717175e;
-    margin-top: 12px;
-    padding: 16px 8px;
-    border-radius: 12px;
-    border: 2px solid #2d2d2d;
+  /* FAB flutuante destacado acima da barra */
+  .navigationRail .buttonAdd {
+    position: fixed;
+    bottom: calc(82px + env(safe-area-inset-bottom));
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 22px;
+    z-index: 6;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  }
+
+  .navigationRail__list {
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
     width: 100%;
-    color: #fcfcfc;
+    max-width: 100%;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 4px;
+    scrollbar-width: none;
+    padding: 0 4px;
+  }
+
+  .navigationRail__list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .navAnchor {
+    margin-bottom: 0;
+    min-width: 64px;
+    flex-shrink: 0;
+    padding: 4px 8px;
+    gap: 4px;
+  }
+
+  .navAnchor div,
+  .navAnchor .navAnchorActive {
+    width: 48px;
+    min-height: 28px;
+    padding: 4px;
+  }
+
+  .navAnchorLabel {
+    font-size: 10px;
+    max-width: 72px;
+  }
+
+  /* Garante que o conteúdo da página não fique escondido atrás da navbar */
+  .app-shell__content {
+    padding-bottom: calc(110px + env(safe-area-inset-bottom)) !important;
+  }
 }

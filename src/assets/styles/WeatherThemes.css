@@ -1,0 +1,293 @@
+/* ============================================================
+   Paletas + gradientes de fundo por condição climática
+   Considera dia/noite via [data-period="day"|"night"].
+   Cores baseadas na aparência real do céu de cada condição.
+   ============================================================ */
+
+.app-shell {
+  /* Fallback genérico (azul céu de dia) */
+  --md-primary: #4fc3f7;
+  --md-primary-darker: #0288d1;
+  --md-on-primary: #001f2e;
+  --accent-warm: #ffe082;
+  --accent-cool: #4fc3f7;
+  --accent-glow: rgba(79, 195, 247, 0.32);
+  --bg-gradient:
+    radial-gradient(120% 80% at 70% 0%, #5fb0ed 0%, transparent 60%),
+    linear-gradient(170deg, #2e6fa8 0%, #1a3a5e 60%, #0b1a2c 100%);
+}
+
+/* ============================================================
+   CLEAR — Céu limpo
+     Dia:   azul céu vibrante + sol dourado
+     Noite: azul profundo + lua/estrelas prateadas
+   ============================================================ */
+
+.app-shell[data-weather="Clear"][data-period="day"] {
+  --md-primary: #29b6f6;
+  --md-primary-darker: #0277bd;
+  --md-on-primary: #00253a;
+  --accent-warm: #ffd54f;        /* sol */
+  --accent-cool: #4fc3f7;        /* céu */
+  --accent-glow: rgba(79, 195, 247, 0.4);
+  --bg-gradient:
+    radial-gradient(80% 50% at 85% 10%, #ffd24a 0%, transparent 35%),
+    radial-gradient(90% 55% at 15% 30%, #5fb6f0 0%, transparent 60%),
+    linear-gradient(170deg, #4aa8e0 0%, #2b6fa6 55%, #102e4d 100%);
+}
+
+.app-shell[data-weather="Clear"][data-period="night"] {
+  --md-primary: #9fa8da;
+  --md-primary-darker: #5c6bc0;
+  --md-on-primary: #0b1140;
+  --accent-warm: #e8eaf6;        /* lua */
+  --accent-cool: #5c6bc0;
+  --accent-glow: rgba(159, 168, 218, 0.35);
+  --bg-gradient:
+    radial-gradient(60% 40% at 80% 15%, #c5cae9 0%, transparent 30%),
+    radial-gradient(90% 50% at 20% 40%, #3949ab 0%, transparent 55%),
+    linear-gradient(175deg, #1a237e 0%, #0d1453 50%, #050823 100%);
+}
+
+/* ============================================================
+   CLOUDS — Nublado
+     Dia:   azul-cinza claro
+     Noite: cinza-azul escuro
+   ============================================================ */
+
+.app-shell[data-weather="Clouds"][data-period="day"] {
+  --md-primary: #90a4ae;
+  --md-primary-darker: #546e7a;
+  --md-on-primary: #0a1418;
+  --accent-warm: #cfd8dc;
+  --accent-cool: #78909c;
+  --accent-glow: rgba(176, 190, 197, 0.32);
+  --bg-gradient:
+    radial-gradient(90% 55% at 75% 15%, #b0c4d6 0%, transparent 55%),
+    radial-gradient(70% 55% at 10% 100%, #4f6173 0%, transparent 55%),
+    linear-gradient(170deg, #5b7287 0%, #34465a 55%, #1a2530 100%);
+}
+
+.app-shell[data-weather="Clouds"][data-period="night"] {
+  --md-primary: #78909c;
+  --md-primary-darker: #455a64;
+  --md-on-primary: #0a1216;
+  --accent-warm: #b0bec5;
+  --accent-cool: #546e7a;
+  --accent-glow: rgba(120, 144, 156, 0.3);
+  --bg-gradient:
+    radial-gradient(90% 55% at 75% 15%, #4a5a6d 0%, transparent 55%),
+    radial-gradient(70% 55% at 10% 100%, #2a333e 0%, transparent 55%),
+    linear-gradient(170deg, #2c3744 0%, #181f29 55%, #0a0e15 100%);
+}
+
+/* ============================================================
+   RAIN / DRIZZLE — Chuva
+     Dia:   azul-aço com tons cinza
+     Noite: azul muito escuro / chuva noturna
+   ============================================================ */
+
+.app-shell[data-weather="Rain"][data-period="day"],
+.app-shell[data-weather="Drizzle"][data-period="day"] {
+  --md-primary: #5e8bb8;
+  --md-primary-darker: #3d6f9e;
+  --md-on-primary: #051421;
+  --accent-warm: #90b8e0;
+  --accent-cool: #3d6f9e;
+  --accent-glow: rgba(94, 139, 184, 0.38);
+  --bg-gradient:
+    radial-gradient(90% 55% at 80% 10%, #4a7ba8 0%, transparent 55%),
+    radial-gradient(70% 60% at 5% 100%, #243a55 0%, transparent 55%),
+    linear-gradient(170deg, #2c4868 0%, #18293f 55%, #0a121e 100%);
+}
+
+.app-shell[data-weather="Rain"][data-period="night"],
+.app-shell[data-weather="Drizzle"][data-period="night"] {
+  --md-primary: #5c7fa0;
+  --md-primary-darker: #3a5878;
+  --md-on-primary: #050d18;
+  --accent-warm: #7a9cc0;
+  --accent-cool: #2c456a;
+  --accent-glow: rgba(92, 127, 160, 0.3);
+  --bg-gradient:
+    radial-gradient(90% 55% at 80% 10%, #2c4868 0%, transparent 55%),
+    radial-gradient(70% 60% at 5% 100%, #14253c 0%, transparent 55%),
+    linear-gradient(175deg, #15263e 0%, #0a1525 55%, #04080f 100%);
+}
+
+/* ============================================================
+   THUNDERSTORM — Tempestade (céu carregado, raios)
+   ============================================================ */
+
+.app-shell[data-weather="Thunderstorm"][data-period="day"] {
+  --md-primary: #9575cd;
+  --md-primary-darker: #5e35b1;
+  --md-on-primary: #110823;
+  --accent-warm: #fff59d;        /* raio amarelo */
+  --accent-cool: #7e57c2;
+  --accent-glow: rgba(255, 245, 157, 0.35);
+  --bg-gradient:
+    radial-gradient(90% 55% at 80% 10%, #5e4488 0%, transparent 55%),
+    radial-gradient(70% 60% at 10% 90%, #2a1a4a 0%, transparent 55%),
+    linear-gradient(170deg, #322455 0%, #1d143a 55%, #0a0820 100%);
+}
+
+.app-shell[data-weather="Thunderstorm"][data-period="night"] {
+  --md-primary: #7e57c2;
+  --md-primary-darker: #4527a0;
+  --md-on-primary: #0a0420;
+  --accent-warm: #fff176;        /* raio amarelo */
+  --accent-cool: #5e35b1;
+  --accent-glow: rgba(255, 241, 118, 0.3);
+  --bg-gradient:
+    radial-gradient(90% 55% at 80% 10%, #3a2868 0%, transparent 55%),
+    radial-gradient(70% 60% at 10% 90%, #1a0f3a 0%, transparent 55%),
+    linear-gradient(175deg, #1c1240 0%, #100822 55%, #050310 100%);
+}
+
+/* ============================================================
+   SNOW — Neve
+     Dia:   azul gelo claro + branco
+     Noite: azul prateado escuro
+   ============================================================ */
+
+.app-shell[data-weather="Snow"][data-period="day"] {
+  --md-primary: #4fc3f7;
+  --md-primary-darker: #0288d1;
+  --md-on-primary: #001a2c;
+  --accent-warm: #e1f5fe;        /* flocos */
+  --accent-cool: #81d4fa;
+  --accent-glow: rgba(225, 245, 254, 0.5);
+  --bg-gradient:
+    radial-gradient(90% 55% at 75% 15%, #b3e5fc 0%, transparent 55%),
+    radial-gradient(70% 60% at 10% 100%, #4a7d9c 0%, transparent 55%),
+    linear-gradient(170deg, #6ba0c2 0%, #3f6885 55%, #1c3a52 100%);
+}
+
+.app-shell[data-weather="Snow"][data-period="night"] {
+  --md-primary: #81d4fa;
+  --md-primary-darker: #0277bd;
+  --md-on-primary: #001120;
+  --accent-warm: #e1f5fe;
+  --accent-cool: #4fc3f7;
+  --accent-glow: rgba(225, 245, 254, 0.4);
+  --bg-gradient:
+    radial-gradient(90% 55% at 75% 15%, #455a78 0%, transparent 55%),
+    radial-gradient(70% 60% at 10% 100%, #1e3047 0%, transparent 55%),
+    linear-gradient(175deg, #1f3552 0%, #112236 55%, #050d18 100%);
+}
+
+/* ============================================================
+   MIST / FOG — Neblina densa, baixa visibilidade
+   ============================================================ */
+
+.app-shell[data-weather="Mist"][data-period="day"],
+.app-shell[data-weather="Fog"][data-period="day"] {
+  --md-primary: #b0bec5;
+  --md-primary-darker: #78909c;
+  --md-on-primary: #0a1014;
+  --accent-warm: #eceff1;
+  --accent-cool: #90a4ae;
+  --accent-glow: rgba(207, 216, 220, 0.4);
+  --bg-gradient:
+    radial-gradient(120% 70% at 50% 20%, #c5d0d8 0%, transparent 70%),
+    linear-gradient(170deg, #758494 0%, #495464 50%, #283038 100%);
+}
+
+.app-shell[data-weather="Mist"][data-period="night"],
+.app-shell[data-weather="Fog"][data-period="night"] {
+  --md-primary: #90a4ae;
+  --md-primary-darker: #546e7a;
+  --md-on-primary: #08100f;
+  --accent-warm: #b0bec5;
+  --accent-cool: #607d8b;
+  --accent-glow: rgba(176, 190, 197, 0.25);
+  --bg-gradient:
+    radial-gradient(120% 70% at 50% 20%, #4a5a64 0%, transparent 70%),
+    linear-gradient(175deg, #2b343c 0%, #1a2128 55%, #0a0d10 100%);
+}
+
+/* ============================================================
+   HAZE — Poluição / nevoeiro seco
+   ============================================================ */
+
+.app-shell[data-weather="Haze"][data-period="day"] {
+  --md-primary: #ffb74d;
+  --md-primary-darker: #ef6c00;
+  --md-on-primary: #2a1500;
+  --accent-warm: #ffe082;
+  --accent-cool: #d2691e;
+  --accent-glow: rgba(255, 183, 77, 0.32);
+  --bg-gradient:
+    radial-gradient(100% 60% at 70% 10%, #d4a36a 0%, transparent 55%),
+    radial-gradient(80% 60% at 10% 100%, #7a5e3a 0%, transparent 55%),
+    linear-gradient(170deg, #8a6e48 0%, #4f3c25 55%, #251c10 100%);
+}
+
+.app-shell[data-weather="Haze"][data-period="night"] {
+  --md-primary: #c98246;
+  --md-primary-darker: #8d4e16;
+  --md-on-primary: #20100a;
+  --accent-warm: #d4a36a;
+  --accent-cool: #5e3f1f;
+  --accent-glow: rgba(201, 130, 70, 0.25);
+  --bg-gradient:
+    radial-gradient(100% 60% at 70% 10%, #4f3422 0%, transparent 55%),
+    linear-gradient(175deg, #3b2818 0%, #21160d 55%, #0e0805 100%);
+}
+
+/* ============================================================
+   SMOKE / DUST / SAND / ASH — Atmosféricos secos (poeira, fumaça)
+   ============================================================ */
+
+.app-shell[data-weather="Smoke"],
+.app-shell[data-weather="Dust"],
+.app-shell[data-weather="Sand"],
+.app-shell[data-weather="Ash"] {
+  --md-primary: #bf8a3a;
+  --md-primary-darker: #855818;
+  --md-on-primary: #1a1004;
+  --accent-warm: #d4a76a;
+  --accent-cool: #6b4a1f;
+  --accent-glow: rgba(191, 138, 58, 0.32);
+  --bg-gradient:
+    radial-gradient(100% 60% at 70% 10%, #a07640 0%, transparent 55%),
+    radial-gradient(80% 60% at 10% 100%, #4a341c 0%, transparent 55%),
+    linear-gradient(170deg, #6b4f30 0%, #3a2a18 55%, #1c130a 100%);
+}
+
+.app-shell[data-weather="Smoke"][data-period="night"],
+.app-shell[data-weather="Dust"][data-period="night"],
+.app-shell[data-weather="Sand"][data-period="night"],
+.app-shell[data-weather="Ash"][data-period="night"] {
+  --bg-gradient:
+    radial-gradient(100% 60% at 70% 10%, #4a3520 0%, transparent 55%),
+    linear-gradient(175deg, #2f2010 0%, #1a1208 55%, #0a0604 100%);
+  --accent-glow: rgba(191, 138, 58, 0.22);
+}
+
+/* ============================================================
+   TORNADO / SQUALL — Alertas (céu esverdeado-amarelado/vermelho)
+   ============================================================ */
+
+.app-shell[data-weather="Tornado"],
+.app-shell[data-weather="Squall"] {
+  --md-primary: #ef5350;
+  --md-primary-darker: #c62828;
+  --md-on-primary: #1a0606;
+  --accent-warm: #ffee58;        /* céu pré-tornado amarelado */
+  --accent-cool: #c62828;
+  --accent-glow: rgba(239, 83, 80, 0.42);
+  --bg-gradient:
+    radial-gradient(90% 55% at 80% 10%, #b8a838 0%, transparent 50%),
+    radial-gradient(70% 60% at 10% 90%, #5e1818 0%, transparent 55%),
+    linear-gradient(170deg, #4a3e22 0%, #2a1c14 55%, #150807 100%);
+}
+
+.app-shell[data-weather="Tornado"][data-period="night"],
+.app-shell[data-weather="Squall"][data-period="night"] {
+  --bg-gradient:
+    radial-gradient(90% 55% at 80% 10%, #423812 0%, transparent 50%),
+    radial-gradient(70% 60% at 10% 90%, #38100f 0%, transparent 55%),
+    linear-gradient(175deg, #281c10 0%, #170a08 55%, #080302 100%);
+}

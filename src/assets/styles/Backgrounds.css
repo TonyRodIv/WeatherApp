@@ -1,7 +1,66 @@
-/* src/assets/styles/Backgrounds.css */
+/* ============================================================
+   App shell + plano de fundo (gradiente dinâmico por clima)
+   ============================================================ */
 
-.weather-background {
-    background-size: cover;
-    background-position: center;
-    transition: background-image 1s ease-in-out;
+.app-shell {
+  position: relative;
+  min-height: 100dvh;
+  width: 100%;
+  background: var(--bg-gradient);
+  background-attachment: fixed;
+  transition: background 700ms var(--easing-decelerate);
+  isolation: isolate;
+  color: var(--md-on-surface);
+}
+
+/* Camada animada com manchas de luz que se movem lentamente */
+.app-shell::before {
+  content: "";
+  position: fixed;
+  inset: -10%;
+  background:
+    radial-gradient(40% 30% at 20% 80%, var(--accent-glow, transparent) 0%, transparent 60%),
+    radial-gradient(30% 25% at 80% 30%, var(--accent-glow, transparent) 0%, transparent 60%);
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: 0;
+  animation: drift 22s ease-in-out infinite alternate;
+}
+
+.app-shell__layout {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  min-height: 100dvh;
+  width: 100%;
+}
+
+.app-shell__content {
+  padding: clamp(20px, 4vw, 48px);
+  overflow-y: auto;
+  max-height: 100dvh;
+}
+
+@keyframes drift {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(2%, -3%, 0);
+  }
+}
+
+/* Mobile -------------------------------------------------------- */
+@media (max-width: 720px) {
+  .app-shell__layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+  }
+
+  .app-shell__content {
+    padding: 16px;
+    /* Mais espaço no fundo para a bottom navbar + FAB flutuante */
+    padding-bottom: calc(110px + env(safe-area-inset-bottom));
+  }
 }

@@ -1,95 +1,136 @@
-import { useState, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import LocalWeather from "./components/LocalWeather";
 import NavigationRail from "./components/navigation";
 import WeatherModal from "./components/weatherModal";
-import BackgroundChanger from "./components/backgroundChanger";
+import AdminPanel from "./components/AdminPanel";
+import type { WeatherUpdate } from "./components/WeatherDisplay";
+import {
+  ADMIN_CITY,
+  getPreset,
+  isAdminQuery,
+  type PresetId,
+} from "./utils/adminPresets";
 
-const weatherBackgrounds: Record<string, string> = {
-  Thunderstorm: 'https://raw.githubusercontent.com/TonyRodIv/WeatherApp/34b36747333eb54aaeb92936c8532b2d743a8dd8/public/weatherBg/thunderstormWeather.svg',
-  Drizzle: 'https://raw.githubusercontent.com/TonyRodIv/WeatherApp/a1a0c2a0cb5f9023e12d46ecf22173ef27a6b69a/public/weatherBg/rainWeather.svg',
-  Rain: 'https://raw.githubusercontent.com/TonyRodIv/WeatherApp/a1a0c2a0cb5f9023e12d46ecf22173ef27a6b69a/public/weatherBg/rainWeather.svg',
-  Snow: 'https://raw.githubusercontent.com/TonyRodIv/WeatherApp/a1a0c2a0cb5f9023e12d46ecf22173ef27a6b69a/public/weatherBg/snowWeather.svg',
-  Mist: 'https://raw.githubusercontent.com/TonyRodIv/WeatherApp/79eefce567fae93e33b780d48507740a3ec08be3/public/weatherBg/mistWeather.svg',
-  Clouds: 'https://raw.githubusercontent.com/TonyRodIv/WeatherApp/007745ed16bfce3d08f68037dcbd368d56846ad4/public/weatherBg/cloudsWeather.svg',
-  Clear: 'https://raw.githubusercontent.com/TonyRodIv/WeatherApp/007745ed16bfce3d08f68037dcbd368d56846ad4/public/weatherBg/clearWeather.svg',
-};
+const DEFAULT_LOCATION_LABEL = "Localização…";
 
 function App() {
-  const [currentLocation, setCurrentLocation] = useState("Localização...");
+  const [currentLocation, setCurrentLocation] = useState(DEFAULT_LOCATION_LABEL);
   const [cities, setCities] = useState<string[]>(() => {
-    const savedCities = localStorage.getItem("weatherAppCities");
-    return savedCities ? JSON.parse(savedCities) : [];
+    const saved = localStorage.getItem("weatherAppCities");
+    return saved ? JSON.parse(saved) : [];
   });
   const [activeCity, setActiveCity] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [weatherCondition, setWeatherCondition] = useState<string | null>(null);
-  const [backgroundImage, setBackgroundImage] = useState<string | null>(weatherBackgrounds['Clear']); // Imagem padrão
+  const [isDay, setIsDay] = useState<boolean>(true);
+
+  /* Modo admin (predefinições) */
+  const [adminPreset, setAdminPreset] = useState<PresetId>("clear-day");
 
   useEffect(() => {
     localStorage.setItem("weatherAppCities", JSON.stringify(cities));
   }, [cities]);
 
-  useEffect(() => {
-    if (weatherCondition) {
-      const newImage = weatherBackgrounds[weatherCondition] || weatherBackgrounds['Clear'];
-      setBackgroundImage(newImage);
-    }
-  }, [weatherCondition]);
+  const handleAddCity = useCallback(
+    (rawCity: string) => {
+      const normalized = rawCity.trim();
+      if (!normalized) return;
 
-  const handleAddCity = (city: string) => {
-    if (cities.includes(city) || currentLocation === city) {
-      setActiveCity(city);
-      return;
-    }
-    setCities((prev) => [...prev, city]);
-    setActiveCity(city);
-  };
+      /* Easter egg: 'admtest' adiciona o modo administrador. */
+      if (isAdminQuery(normalized)) {
+        setCities((prev) =>
+          prev.includes(ADMIN_CITY) ? prev : [...prev, ADMIN_CITY]
+        );
+        setActiveCity(ADMIN_CITY);
+        return;
+      }
 
-  const handleDeleteCity = (cityToDelete: string) => {
-    setCities(cities.filter(city => city !== cityToDelete));
-    if (activeCity === cityToDelete) {
-      setActiveCity(currentLocation);
-    }
-  };
+      setCities((prev) =>
+        prev.includes(normalized) || normalized === currentLocation
+          ? prev
+          : [...prev, normalized]
+      );
+      setActiveCity(normalized);
+    },
+    [currentLocation]
+  );
 
-  const handleCurrentLocationLoad = (name: string) => {
+  const handleDeleteCity = useCallback(
+    (cityToDelete: string) => {
+      setCities((prev) => prev.filter((c) => c !== cityToDelete));
+      setActiveCity((current) =>
+        current === cityToDelete ? currentLocation : current
+      );
+    },
+    [currentLocation]
+  );
+
+  const handleCurrentLocationLoad = useCallback((name: string) => {
     setCurrentLocation(name);
-    if (activeCity === null) {
-      setActiveCity(name);
-    }
-  };
+    setActiveCity((current) => current ?? name);
+  }, []);
 
-  const handleWeatherChange = (weather: string) => {
-    setWeatherCondition(weather);
-  };
+  const handleWeatherChange = useCallback((update: WeatherUpdate) => {
+    setWeatherCondition(update.main);
+    setIsDay(update.isDay);
+  }, []);
+
+  const isAdminMode = activeCity === ADMIN_CITY;
+  const adminData = isAdminMode ? getPreset(adminPreset) : null;
+
+  /* Quando entra/sai do admin mode, sincroniza weatherCondition pro tema. */
+  useEffect(() => {
+    if (adminData) {
+      const icon = adminData.weather.weather[0].icon;
+      setWeatherCondition(adminData.weather.weather[0].main);
+      setIsDay(icon.endsWith("d"));
+    }
+  }, [adminData]);
+
+  /* Garante que o tema retorna a 'Clear' se nenhum clima foi definido. */
+  const effectiveWeather = weatherCondition ?? "Clear";
 
   return (
-    <div 
-      id="backgroundChanger" 
-      className="weather-background" 
-      style={{ backgroundImage: `url(${backgroundImage})` }}
+    <div
+      id="backgroundChanger"
+      className="app-shell"
+      data-weather={effectiveWeather}
+      data-period={isDay ? "day" : "night"}
     >
-      <BackgroundChanger imageUrl={backgroundImage} />
-      <main className="mainContainer progressive-blur-container">
-        <section className="weatherContainer conteudo-frontal">
-          <NavigationRail
-            currentLocation={currentLocation}
-            cities={cities}
-            activeCity={activeCity}
-            onSelectCity={setActiveCity}
-            onAddCity={() => setShowModal(true)}
-            onDeleteCity={handleDeleteCity}
+      <div className="app-shell__layout">
+        <NavigationRail
+          currentLocation={currentLocation}
+          cities={cities}
+          activeCity={activeCity}
+          onSelectCity={setActiveCity}
+          onAddCity={() => setShowModal(true)}
+          onDeleteCity={handleDeleteCity}
+        />
+
+        <main className="app-shell__content">
+          <LocalWeather
+            city={
+              isAdminMode
+                ? null
+                : activeCity === currentLocation
+                ? null
+                : activeCity
+            }
+            onCityNameLoad={handleCurrentLocationLoad}
+            onWeatherChange={handleWeatherChange}
+            onRequestAddCity={() => setShowModal(true)}
+            mockWeather={adminData?.weather ?? null}
+            mockForecast={adminData?.forecast ?? null}
           />
 
-          <main className="weatherInfo">
-            <LocalWeather 
-              city={activeCity === currentLocation ? null : activeCity} 
-              onCityNameLoad={handleCurrentLocationLoad} 
-              onWeatherChange={handleWeatherChange}
+          {isAdminMode && (
+            <AdminPanel
+              activePreset={adminPreset}
+              onSelectPreset={(id) => setAdminPreset(id)}
             />
-          </main>
-        </section>
-      </main>
+          )}
+        </main>
+      </div>
 
       {showModal && (
         <WeatherModal

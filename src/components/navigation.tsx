@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { MdAdd, MdLocationPin, MdStar } from "react-icons/md";
+import { useEffect, useState } from "react";
+import { MdAdd, MdLocationPin, MdStar, MdDelete } from "react-icons/md";
 
 interface NavigationRailProps {
   currentLocation: string;
@@ -10,75 +10,105 @@ interface NavigationRailProps {
   onDeleteCity: (city: string) => void;
 }
 
-function NavigationRail({ currentLocation, cities, activeCity, onSelectCity, onAddCity, onDeleteCity }: NavigationRailProps) {
-  const [contextMenu, setContextMenu] = useState<{
-    visible: boolean;
-    x: number;
-    y: number;
-    city: string | null;
-  }>({
-    visible: false,
-    x: 0,
-    y: 0,
-    city: null,
-  });
+interface ContextMenuState {
+  visible: boolean;
+  x: number;
+  y: number;
+  city: string | null;
+}
 
-  // Efeito para fechar o menu ao clicar em qualquer lugar da tela
+const INITIAL_CONTEXT: ContextMenuState = {
+  visible: false,
+  x: 0,
+  y: 0,
+  city: null,
+};
+
+function NavigationRail({
+  currentLocation,
+  cities,
+  activeCity,
+  onSelectCity,
+  onAddCity,
+  onDeleteCity,
+}: NavigationRailProps) {
+  const [contextMenu, setContextMenu] = useState<ContextMenuState>(INITIAL_CONTEXT);
+
   useEffect(() => {
-    const handleClick = () => setContextMenu({ ...contextMenu, visible: false });
-    if (contextMenu.visible) {
-      window.addEventListener('click', handleClick);
-    }
-    return () => {
-      window.removeEventListener('click', handleClick);
+    if (!contextMenu.visible) return;
+    const close = () => setContextMenu(INITIAL_CONTEXT);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") close();
     };
-  }, [contextMenu]);
+    window.addEventListener("click", close);
+    window.addEventListener("scroll", close, true);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("click", close);
+      window.removeEventListener("scroll", close, true);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [contextMenu.visible]);
 
   const handleContextMenu = (event: React.MouseEvent, city: string) => {
     event.preventDefault();
-    setContextMenu({
-      visible: true,
-      x: event.pageX,
-      y: event.pageY,
-      city: city,
-    });
+    const safeX = Math.min(event.pageX, window.innerWidth - 180);
+    const safeY = Math.min(event.pageY, window.innerHeight - 80);
+    setContextMenu({ visible: true, x: safeX, y: safeY, city });
   };
 
   const handleDelete = () => {
-    if (contextMenu.city) {
-      onDeleteCity(contextMenu.city);
-    }
-    setContextMenu({ ...contextMenu, visible: false });
+    if (contextMenu.city) onDeleteCity(contextMenu.city);
+    setContextMenu(INITIAL_CONTEXT);
   };
 
   return (
-    <nav className="navigationRail">
-      <button className="buttonAdd" onClick={onAddCity}>
+    <nav className="navigationRail" aria-label="Cidades salvas">
+      <button
+        type="button"
+        className="buttonAdd"
+        onClick={onAddCity}
+        aria-label="Adicionar cidade"
+      >
         <MdAdd size={30} color="white" />
       </button>
 
-      <div>
+      <div className="navigationRail__list">
         <button
+          type="button"
           className="navAnchor"
           onClick={() => onSelectCity(currentLocation)}
+          aria-current={activeCity === currentLocation ? "page" : undefined}
+          title={currentLocation}
         >
-          <div className={`navAnchorIcon ${activeCity === currentLocation ? "navAnchorActive" : ""}`}>
+          <div
+            className={`navAnchorIcon ${
+              activeCity === currentLocation ? "navAnchorActive" : ""
+            }`}
+          >
             <MdStar size={18} />
           </div>
-          {currentLocation}
+          <span className="navAnchorLabel">{currentLocation}</span>
         </button>
-        
-        {cities.map((city, index) => (
+
+        {cities.map((city) => (
           <button
-            key={index}
+            key={city}
+            type="button"
             className="navAnchor"
             onClick={() => onSelectCity(city)}
-            onContextMenu={(e) => handleContextMenu(e, city)} // Adiciona o evento de clique direito
+            onContextMenu={(e) => handleContextMenu(e, city)}
+            aria-current={activeCity === city ? "page" : undefined}
+            title={city}
           >
-            <div className={`navAnchorIcon ${activeCity === city ? "navAnchorActive" : ""}`}>
+            <div
+              className={`navAnchorIcon ${
+                activeCity === city ? "navAnchorActive" : ""
+              }`}
+            >
               <MdLocationPin size={18} />
             </div>
-            {city}
+            <span className="navAnchorLabel">{city}</span>
           </button>
         ))}
       </div>
@@ -87,10 +117,17 @@ function NavigationRail({ currentLocation, cities, activeCity, onSelectCity, onA
         <div
           className="context-menu"
           style={{ top: contextMenu.y, left: contextMenu.x }}
+          role="menu"
         >
-          <div className="context-menu-item" onClick={handleDelete}>
-            Deletar
-          </div>
+          <button
+            type="button"
+            className="context-menu-item"
+            onClick={handleDelete}
+            role="menuitem"
+          >
+            <MdDelete size={18} aria-hidden="true" />
+            Remover cidade
+          </button>
         </div>
       )}
     </nav>
